@@ -26,6 +26,7 @@
         }
     .menu:hover{
         background-color: blueviolet;
+        color: white;
     }
     .highlight{
          background: #d6f5d6;
@@ -42,33 +43,52 @@
 <body>
     <div id="sidebar">
         <h1>Doctors deshboard</h1>
-        <div class="menu" data="Dashboard">Dashboard</div>
-        <div class="menu" data="patient profile">patient profile</div>
-        <div class="menu" data="appointment">appointment</div>
+        <div class="menu" data-name="Dashboard">Dashboard</div>
+        <div class="menu" data-name="patient profile">patient profile</div>
+        <div class="menu" data-name="appointment">appointment</div>
     </div>
-    <div id="content">
+    <div id="contant">
         <h2>Welcome</h2>
         <div id="output"></div>
     </div>
     <script>
         let usage={
-            "Dashboard":0;
-            "patient profile":0;
-            "appointment":0;
+            "Dashboard":0,
+            "patient profile":0,
+            "appointment":0,
         };
     const sidebar=document.getElementById("sidebar");
-    const items=document.querySelectorAll("menu");
+    const items=document.querySelectorAll(".menu");
     items.forEach(item=>{
-        item.addEventListener("click",function(){;
+        item.addEventListener("click",()=>{
+            const name=item.dataset.name;
         usage[name]++;
-        document.getElementById("Output").innerHTML=
+        document.getElementById("output").innerHTML=
         `<h3>${name}</h3><p>Usage Count: ${usage[name]}</p>`;
         reorderMenu();
     });
 });
 function reorderMenu(){
-    
-}
+    const sorted =Object.entries(usage).sort((a,b)=>b[1]-a[1]);
+                document.querySelectorAll(".menu").forEach(i => {
+                i.classList.remove("highlight");
+            });
+
+            // Rebuild sidebar menu items in new order
+            sorted.forEach(([name, count], index) => {
+                const element = document.querySelector(`.menu[data="${name}"]`);
+
+                // Add highlight for frequently used items
+                if (count > 0) {
+                    element.classList.add("highlight");
+                }
+
+                sidebar.appendChild(element); // moves the element
+            });
+        }
+    </script>
+
+
 
 </body>
 
